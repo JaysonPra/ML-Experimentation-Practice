@@ -1,5 +1,5 @@
 from kaggle.api.kaggle_api_extended import KaggleApi
-from config import DATA_DIR, DATASET_HANDLE
+from config import DATA_DIR, DATASET_HANDLE, DATASET_NAME
 import zipfile
 import os
 
@@ -8,13 +8,11 @@ def run_ingestion(save_location=DATA_DIR):
     api.authenticate()
 
     dataset_handle = DATASET_HANDLE
-    file_name = dataset_handle.split('/')[-1]
-    print(file_name)
+    file_name = DATASET_NAME
     zip_path = save_location / f"{file_name}.zip"
-    print(zip_path)
 
     api.dataset_download_files(
-        dataset="borovai0/student-performance-analytics-dataset",
+        dataset=dataset_handle,
         path=save_location
     )
 
