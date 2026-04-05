@@ -1,19 +1,26 @@
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
-def _scale_map(scale_ftrs, ignore_ftrs):
-    mapper = {
-        "standard": StandardScaler(),
-        "minmax": MinMaxScaler(),
-        "robust": RobustScaler(),
+def scale_map(search_grid):
+    regressor_mapper = {
+        "linear_regression": LinearRegression,
+        "random_forest": RandomForestRegressor,
+        "xgboost": XGBRegressor,
+    }
+    
+    scaler_mapper = {
+        "standard": StandardScaler,
+        "minmax": MinMaxScaler,
+        "robust": RobustScaler,
     }
 
-    transformer = []
+    for model_cfg in search_grid:
+        reg_name = model_cfg["regressor"][0]
+        model_cfg["regressor"] = regressor_mapper.get(reg_name)
+        
+        scaler_names = model_cfg.get("scalers", [])
+        model_cfg["scalers"] = [scaler_mapper.get(s) for s in scaler_names]
 
-    for scaler, feature in scale_ftrs.items():
-        active_ftrs = [col for col in feature if col not in ignore_ftrs]
-        if active_ftrs:
-            scaler_object = mapper.get(scaler.lower())
-            if scaler_object:
-                transformer.append((scaler, scaler_object, active_ftrs))
-
-    return transformer
+    return search_grid
