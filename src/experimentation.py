@@ -1,13 +1,13 @@
 import mlflow
 import optuna
 from optuna.trial import Trial
-from src.model_train import train_model
-from src.pipeline import build_pipeline
 import yaml
 import pandas as pd
 from optuna.visualization import plot_pareto_front
 
 from src.model_mapper import scale_map
+from src.model_train import train_model
+from src.pipeline import build_pipeline
 
 def _suggest_param(trial: Trial, name, value):
     if isinstance(value, list) and len(value) > 2:
