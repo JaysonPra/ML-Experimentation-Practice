@@ -4,10 +4,12 @@ from optuna.trial import Trial
 import yaml
 import pandas as pd
 from optuna.visualization import plot_pareto_front
+import argparse
 
 from src.model_mapper import scale_map
 from src.model_train import train_model
 from src.pipeline import build_pipeline
+from config import EXPERIMENTATION_DIR
 
 def _suggest_param(trial: Trial, name, value):
     if isinstance(value, list) and len(value) > 2:
@@ -81,3 +83,18 @@ def start_experiment(experiment_file_name):
     for trial in study.best_trials:
         with mlflow.start_run(run_id=trial.user_attrs.get("mlflow_run_id")):
             mlflow.set_tag("is_pareto", "True")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Regression")
+    
+    parser.add_argument(
+        "--file",
+        required=True,
+        type=str,
+        help="Write the name of the YAML experimentation file"
+    )
+
+    args = parser.parse_args()
+    if args.file:
+        experiment_file = EXPERIMENTATION_DIR / args.file
+        start_experiment(experiment_file)
