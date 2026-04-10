@@ -9,5 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# MLflow
+mlruns/
+mlflow.db
+
 # Notebooks
 notebooks/
