@@ -1,11 +1,11 @@
-experiment_name: "Student_Performance_Optimization_v1"
+experiment_name: "Student_Performance_v2"
 
 data:
-  file_name: "data/student_data.csv"
+  file_name: "data/student_performance_data.csv"
   target_col: "overall_score"
 
 train:
-  n_trials: 50
+  n_trials: 2
   n_splits: 5
   search_grid:
     - regressor: ["random_forest"]
@@ -13,13 +13,6 @@ train:
       n_estimators: [100, 500]
       max_depth: [3, 20]
       criterion: ["squared_error", "friedman_mse"]
-
-    - regressor: ["xgboost"]
-      scalers: ["standard", "minmax"]
-      n_estimators: [100, 1000]
-      learning_rate: [0.01, 0.3]
-      max_depth: [3, 10]
-      tree_method: ["hist"]
 
     - regressor: ["linear_regression"]
       scalers: ["standard"]
